@@ -43,7 +43,8 @@ def drop_db():
 # @cli.command()
 # def create_admin():
 #     """Creates the admin user."""
-#     db.session.add(User(email="admin@admin.com", password="admin", admin=True))
+#     db.session.add(User(email="admin@admin.com",
+#                         password="admin", admin=True))
 #     db.session.commit()
 
 
@@ -56,7 +57,7 @@ def create_data():
 @cli.command()
 def test():
     """Runs the unit tests without test coverage."""
-    tests = unittest.TestLoader().discover("project/tests", pattern="test*.py")
+    tests = unittest.TestLoader().discover("tests", pattern="test*.py")
     result = unittest.TextTestRunner(verbosity=2).run(tests)
     if result.wasSuccessful():
         sys.exit(0)

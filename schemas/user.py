@@ -7,3 +7,9 @@ class UserSchema(ma.ModelSchema):
         model = UserModel
         load_only = ("password",)
         dump_only = ("id",)
+
+
+class UserLoginSchema(ma.ModelSchema):
+    class Meta:
+        model = UserModel
+        fields = ("username", "password")

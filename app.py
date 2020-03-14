@@ -1,28 +1,24 @@
 import os
 
-from flask import Flask, jsonify
-from marshmallow import ValidationError
+from flask import Flask
 from dotenv import load_dotenv
+from werkzeug.exceptions import (MethodNotAllowed, NotFound, Forbidden,
+                                 Unauthorized, InternalServerError)
 
-from resources.user import UserLogin
+from resources.user import UserLogin, UserRegister, User, UserList
 from extensions import jwt, db, migrate, api, ma
 
 
 def create_app(script_info=None):
 
-    # instantiate the app
     app = Flask(__name__)
 
-    app.config["DEBUG"] = True
-    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-        "DATABASE_URI", "sqlite:///data.db"
-    )
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["PROPAGATE_EXCEPTIONS"] = True
     load_dotenv(".env", verbose=True)
+    app_settings = os.getenv(
+        "APP_SETTINGS", "config.ProductionConfig"
+    )
+    app.config.from_object(app_settings)
 
-    # set up extensions
     jwt.init_app(app)
     db.init_app(app)
     api.init_app(app)
@@ -30,31 +26,28 @@ def create_app(script_info=None):
     migrate.init_app(app, db)
 
     api.add_resource(UserLogin, "/login")
+    api.add_resource(UserRegister, "/register")
+    api.add_resource(User, "/user/<int:user_id>")
+    api.add_resource(UserList, "/users")
 
-    # @login_manager.user_loader
-    # def load_user(user_id):
-    #     return User.query.filter(User.id == int(user_id)).first()
+    @api.errorhandler(Unauthorized)
+    def unauthorized_page(error):
+        return {"message": "401, change this on prod."}, 401
 
-    # # error handlers
-    # @app.errorhandler(401)
-    # def unauthorized_page(error):
-    #     return render_template("errors/401.html"), 401
+    @api.errorhandler(Forbidden)
+    def forbidden_page(error):
+        return {"message": "403, change this on prod."}, 403
 
-    # @app.errorhandler(403)
-    # def forbidden_page(error):
-    #     return render_template("errors/403.html"), 403
+    @api.errorhandler(NotFound)
+    def page_not_found(error):
+        return {"message": "404, change this on prod."}, 404
 
-    # @app.errorhandler(404)
-    # def page_not_found(error):
-    #     return render_template("errors/404.html"), 404
+    @api.errorhandler(MethodNotAllowed)
+    def method_not_allowed(error):
+        return {"message": "405, change this on prod."}, 405
 
-    # @app.errorhandler(500)
-    # def server_error_page(error):
-    #     return render_template("errors/500.html"), 500
-
-    # # shell context for flask cli
-    # @app.shell_context_processor
-    # def ctx():
-    #     return {"app": app, "db": db}
+    @api.errorhandler(InternalServerError)
+    def server_error_page(error):
+        return {"message": "500, change this on prod."}, 500
 
     return app
