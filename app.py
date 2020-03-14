@@ -14,7 +14,7 @@ def create_app(script_info=None):
     app = Flask(__name__)
 
     load_dotenv(".env", verbose=True)
-    app_settings = os.getenv(
+    app_settings = os.environ.get(
         "APP_SETTINGS", "config.ProductionConfig"
     )
     app.config.from_object(app_settings)
