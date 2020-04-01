@@ -8,21 +8,36 @@ import os
 from base import BaseTestCase
 
 
-class TestUserBlueprint(BaseTestCase):
-    # def test_correct_login(self):
-    #     # Ensure login behaves correctly with correct credentials.
-    #     with self.client:
-    #         response = self.client.post(
-    #             "/login",
-    #             data=dict(email="ad@min.com", password="admin_user"),
-    #             follow_redirects=True,
-    #         )
-    #         self.assertIn(b"Welcome", response.data)
-    #         self.assertIn(b"Logout", response.data)
-    #         self.assertIn(b"Members", response.data)
-    #         self.assertTrue(current_user.email == "ad@min.com")
-    #         self.assertTrue(current_user.is_active())
-    #         self.assertEqual(response.status_code, 200)
+class TestUserResource(BaseTestCase):
+    def test_correct_login(self):
+        self.create_user(username="test_username",
+                         password="test_password")
+        with self.client:
+            response = self.client.post(
+                "/login",
+                json={"username": "test_username", "password": "test_password"},
+                follow_redirects=True,
+            )
+            assert response.is_json
+            self.assertEqual(response.status_code, 200)
+            self.assertIn("access_token", response.json)
+            self.assertIn("refresh_token", response.json)
+
+    def test_wrong_login(self):
+        self.create_user(username="test_username",
+                         password="test_password")
+        with self.client:
+            response = self.client.post(
+                "/login",
+                json={"username": "test_username", "password": "wrong_password"},
+                follow_redirects=True,
+            )
+            assert response.is_json
+            self.assertEqual(response.status_code, 401)
+            self.assertNotIn("access_token", response.json)
+            self.assertNotIn("refresh_token", response.json)
+            self.assertIn("message", response.json)
+
 
     # def test_logout_behaves_correctly(self):
     #     # Ensure logout behaves correctly - regarding the session.
@@ -77,24 +92,6 @@ class TestUserBlueprint(BaseTestCase):
     #         user = User.query.filter_by(email="ad@min.com").first()
     #         self.assertIsInstance(user.registered_on, datetime.datetime)
 
-    # def test_check_password(self):
-    #     # Ensure given password is correct after unhashing.
-    #     user = User.query.filter_by(email="ad@min.com").first()
-    #     self.assertTrue(
-    #         bcrypt.check_password_hash(user.password, "admin_user")
-    #     )
-    #     self.assertFalse(bcrypt.check_password_hash(user.password, "foobar"))
-
-    # def test_validate_invalid_password(self):
-    #     # Ensure user can't login when the pasword is incorrect.
-    #     with self.client:
-    #         response = self.client.post(
-    #             "/login",
-    #             data=dict(email="ad@min.com", password="foo_bar"),
-    #             follow_redirects=True,
-    #         )
-    #     self.assertIn(b"Invalid email and/or password.", response.data)
-
     # def test_register_route(self):
     #     # Ensure about route behaves correctly.
     #     response = self.client.get("/register", follow_redirects=True)
@@ -116,8 +113,6 @@ class TestUserBlueprint(BaseTestCase):
     #         self.assertTrue(current_user.email == "test@tester.com")
     #         self.assertTrue(current_user.is_active())
     #         self.assertEqual(response.status_code, 200)
-    def test_deneme(self):
-        self.assertTrue(False)
 
 
 if __name__ == "__main__":
