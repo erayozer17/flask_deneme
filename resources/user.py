@@ -28,6 +28,15 @@ class UserRegister(Resource):
 
         return {"message": gettext("user_registered")}, 201
 
+    def get(self, confirmation_token: str):
+        user = UserModel.find_by_confirmation_token(confirmation_token)
+        if user:
+            user.confirmed = True
+            user.save_to_db()
+            return {"message": gettext("user_confirmed")}, 200
+        else:
+            return {"message": gettext("user_not_found")}, 404
+
 
 class User(Resource):
     @jwt_required
@@ -62,9 +71,12 @@ class UserLogin(Resource):
         user = UserModel.find_by_username(user_data.username)
 
         if user and safe_str_cmp(user.password, user_data.password):
-            access_token = create_access_token(identity=user.id, fresh=True)
-            refresh_token = create_refresh_token(user.id)
-            return {"access_token": access_token,
-                    "refresh_token": refresh_token}, 200
+            if user.confirmed:
+                access_token = create_access_token(identity=user.id, fresh=True)
+                refresh_token = create_refresh_token(user.id)
+                return {"access_token": access_token,
+                        "refresh_token": refresh_token}, 200
+            else:
+                return {"message": gettext("user_not_confirmed")}, 200
 
         return {"message": gettext("user_invalid_credentials")}, 401

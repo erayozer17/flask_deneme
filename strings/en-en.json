@@ -5,7 +5,8 @@
     "user_deleted": "User deleted.",
     "user_invalid_credentials": "Invalid credentials!",
     "user_logged_out": "User <id={}> successfully logged out.",
-    "user_not_confirmed": "You have not confirmed registration, please check your email <{}>.",
+    "user_not_confirmed": "You have not confirmed registration, please check your email.",
     "user_error_creating": "Internal server error. Failed to create user.",
-    "user_registered": "Account created successfully"
+    "user_registered": "Account created successfully",
+    "user_confirmed": "Confirmation successful"
   }

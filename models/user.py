@@ -1,4 +1,5 @@
 from typing import List
+from uuid import uuid4
 
 from extensions import db
 
@@ -10,6 +11,13 @@ class UserModel(db.Model):
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80), nullable=False, unique=True)
+    confirmation_token = db.Column(db.String(36), nullable=True, unique=True, default=str(uuid4()))
+    confirmed = db.Column(db.Boolean(), default=False)
+
+
+    @classmethod
+    def find_by_confirmation_token(cls, confirmation_token: str) -> "UserModel":
+        return cls.query.filter_by(confirmation_token=confirmation_token).first()
 
     @classmethod
     def find_by_username(cls, username: str) -> "UserModel":
@@ -30,3 +38,4 @@ class UserModel(db.Model):
     def delete_from_db(self) -> None:
         db.session.delete(self)
         db.session.commit()
+
