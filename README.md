@@ -60,3 +60,10 @@ $ flake8 project
 ```sh
 $ celery worker -A celery_app
 ```
+
+### Exporting to requirements.txt
+
+```sh
+$ poetry export -f requirements.txt > requirements.txt
+```
+
