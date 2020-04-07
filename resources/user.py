@@ -6,10 +6,12 @@ from flask_jwt_extended import (
     create_access_token,
     create_refresh_token
 )
-# from libs.strings import gettext
 from models.user import UserModel
 from schemas.user import UserSchema, UserLoginSchema
 from libs.strings import gettext
+from tasks.email import send_transactional_mail_task
+
+from services.email import send_transactional_mail
 
 user_schema = UserSchema()
 user_list_schema = UserSchema(many=True)
@@ -26,6 +28,11 @@ class UserRegister(Resource):
 
         user.save_to_db()
 
+        # TODO Create an html template for email.
+        send_transactional_mail_task.delay(gettext("user_confirmation_subject"),
+                                user.email,
+                                f'<html><a href="http://localhost:5000/register/{user.confirmation_token}">Confirm</a></html>')
+        
         return {"message": gettext("user_registered")}, 201
 
     def get(self, confirmation_token: str):

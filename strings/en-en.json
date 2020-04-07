@@ -8,5 +8,6 @@
     "user_not_confirmed": "You have not confirmed registration, please check your email.",
     "user_error_creating": "Internal server error. Failed to create user.",
     "user_registered": "Account created successfully",
-    "user_confirmed": "Confirmation successful"
+    "user_confirmed": "Confirmation successful",
+    "user_confirmation_subject": "Welcome to IngrydHR"
   }
