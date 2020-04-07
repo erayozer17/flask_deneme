@@ -1,6 +1,8 @@
 from extensions import ma
 from models.user import UserModel
 
+# from werkzeug.security import generate_password_hash
+
 
 class UserSchema(ma.ModelSchema):
     class Meta:
@@ -12,4 +14,17 @@ class UserSchema(ma.ModelSchema):
 class UserLoginSchema(ma.ModelSchema):
     class Meta:
         model = UserModel
-        fields = ("username", "password")
+        fields = ("email", "password")
+
+
+class UserInviteSchema(ma.ModelSchema):
+    class Meta:
+        model = UserModel
+        fields = ("email", "name", "surname", "is_manager")
+
+
+class UserRegisterSchema(ma.ModelSchema):
+    class Meta:
+        model = UserModel
+        fields = ("email", "name", "surname", "password")
+    # password = generate_password_hash()

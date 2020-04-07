@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from werkzeug.exceptions import (MethodNotAllowed, NotFound, Forbidden,
                                  Unauthorized, InternalServerError)
 
-from resources.user import UserLogin, UserRegister, User, UserList
+from resources.user import UserLogin, UserRegister, User, UserList, UserInvite
 from extensions import jwt, db, migrate, api, ma, celery, mail
 
 
@@ -32,6 +32,7 @@ def create_app(script_info=None):
     api.add_resource(UserRegister, "/register/<string:confirmation_token>")
     api.add_resource(User, "/user/<int:user_id>")
     api.add_resource(UserList, "/users")
+    api.add_resource(UserInvite, "/invite")
 
     @api.errorhandler(Unauthorized)
     def unauthorized_page(error):

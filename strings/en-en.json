@@ -9,5 +9,10 @@
     "user_error_creating": "Internal server error. Failed to create user.",
     "user_registered": "Account created successfully",
     "user_confirmed": "Confirmation successful",
-    "user_confirmation_subject": "Welcome to IngrydHR"
+    "user_already_confirmed": "User is already confirmed",
+    "user_must_confirm": "User must confirm the account",
+    "user_confirmation_subject": "Welcome to IngrydHR",
+    "user_register_password_required": "Password is required for registering.",
+    "user_password_not_set": "User must set password",
+    "user_invited": "User invited successfully"
   }
