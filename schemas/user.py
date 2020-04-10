@@ -16,7 +16,7 @@ class UserSchema(ma.ModelSchema):
 
 class UserLoginSchema(ma.ModelSchema):
     email = ma.String()
-    name = ma.String()
+    password = ma.String()
 
 
 class UserInviteSchema(ma.ModelSchema):

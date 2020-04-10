@@ -16,3 +16,9 @@ class CompanyModel(db.Model):
         db.CheckConstraint('default_off_days >= 0', name='check_default_off_days_positive'),
     )
 
+    def save_to_db(self) -> int:
+        db.session.add(self)
+        db.session.commit()
+        db.session.refresh(self)
+        return self.id
+

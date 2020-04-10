@@ -9,3 +9,10 @@ class AddressModel(db.Model):
     city = db.Column(db.String(64))
     country = db.Column(db.String(64))
     company = db.relationship('CompanyModel', uselist=False, back_populates='address', lazy="select")
+
+
+    def save_to_db(self) -> int:
+        db.session.add(self)
+        db.session.commit()
+        db.session.refresh(self)
+        return self.id
