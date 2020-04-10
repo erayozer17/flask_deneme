@@ -3,6 +3,7 @@ from models.company import CompanyModel
 from schemas.address import AddressSchema
 from schemas.remaining_employee import RemainingEmployeeSchema
 
+
 class CompanySchema(ma.ModelSchema):
     class Meta:
         model = CompanyModel

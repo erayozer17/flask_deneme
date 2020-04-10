@@ -15,7 +15,6 @@ from schemas.company import CompanySchema
 from libs.strings import gettext
 from tasks.email import send_transactional_mail_task
 
-from services.email import send_transactional_mail
 
 user_schema = UserSchema()
 user_list_schema = UserSchema(many=True)
@@ -50,9 +49,9 @@ class UserRegister(Resource):
 
         # TODO Create an html template for email.
         send_transactional_mail_task.delay(gettext("user_confirmation_subject"),
-                                user_obj.email,
-                                f'<html><a href="http://localhost:5000/register/{user_obj.confirmation_token}">Confirm</a></html>')
-        
+                                           user_obj.email,
+                                           f'<html><a href="http://localhost:5000/register/{user_obj.confirmation_token}">Confirm</a></html>')
+
         return {"message": gettext("user_registered")}, 201
 
     def get(self, confirmation_token: str):
@@ -90,8 +89,8 @@ class UserInvite(Resource):
 
         # TODO Create an html template for email.
         send_transactional_mail_task.delay(gettext("user_confirmation_subject"),
-                                user.email,
-                                f'<html><a href="http://localhost:5000/register/{user.confirmation_token}">Confirm</a></html>')
+                                           user.email,
+                                           f'<html><a href="http://localhost:5000/register/{user.confirmation_token}">Confirm</a></html>')
         return {"message": gettext("user_invited")}, 200
 
 

@@ -11,9 +11,9 @@ class BaseConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PROPAGATE_EXCEPTIONS = True
     DEBUG = True
-    MAIL_SERVER='localhost'
-    MAIL_PORT=1025
-    MAIL_DEFAULT_SENDER='test@ingrydhr.com'
+    MAIL_SERVER = 'localhost'
+    MAIL_PORT = 1025
+    MAIL_DEFAULT_SENDER = 'test@ingrydhr.com'
 
 
 class DevelopmentConfig(BaseConfig):
@@ -42,10 +42,10 @@ class ProductionConfig(BaseConfig):
     CELERY_RESULT_BACKEND = os.environ["PROD_CELERY_RESULT_BACKEND"]
     DEBUG = False
 
-    MAIL_SERVER=os.environ.get("MAIL_SERVER")
-    MAIL_PORT=os.environ.get("MAIL_PORT")
-    MAIL_USERNAME=os.environ.get("MAIL_USERNAME")
-    MAIL_PASSWORD=os.environ.get("MAIL_PASSWORD")
-    MAIL_USE_TLS=os.environ.get("MAIL_USE_TLS")
-    MAIL_USE_SSL=os.environ.get("MAIL_USE_SSL")
-    MAIL_DEFAULT_SENDER=os.environ.get("MAIL_DEFAULT_SENDER")
+    MAIL_SERVER = os.environ.get("MAIL_SERVER")
+    MAIL_PORT = os.environ.get("MAIL_PORT")
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS")
+    MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL")
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")

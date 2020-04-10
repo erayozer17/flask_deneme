@@ -1,7 +1,6 @@
 from extensions import ma
 from models.user import UserModel
-from schemas.company import CompanySchema, CompanyLoadSchema
-from schemas.remaining_employee import RemainingEmployeeSchema
+from schemas.company import CompanyLoadSchema
 
 from copy import deepcopy
 

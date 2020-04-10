@@ -22,4 +22,3 @@ class CompanyModel(db.Model):
         db.session.commit()
         db.session.refresh(self)
         return self.id
-

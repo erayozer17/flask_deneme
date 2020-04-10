@@ -19,8 +19,8 @@ def create_app(script_info=None):
         raise ValueError('APP_SETTINGS environment variable is not set. Aborting.')
     app.config.from_object(app_settings)
 
-    #Migration purposes
-    from models import user, remaining_employee, company, address
+    # Migration purposes
+    from models import user, remaining_employee, company, address # NOQA
 
     jwt.init_app(app)
     db.init_app(app)
@@ -59,6 +59,7 @@ def create_app(script_info=None):
 
     return app
 
+
 def init_celery(app=None):
     app = app or create_app()
     celery.conf.broker_url = app.config["CELERY_BROKER_URL"]
@@ -74,4 +75,3 @@ def init_celery(app=None):
 
     celery.Task = ContextTask
     return celery
-

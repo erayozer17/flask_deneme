@@ -17,7 +17,6 @@ class RemainingEmployeeModel(db.Model):
         self.no_of_remaining_employee = self.no_of_remaining_employee - 1
         self.save_to_db()
 
-
     def save_to_db(self) -> int:
         db.session.add(self)
         db.session.commit()

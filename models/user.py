@@ -26,7 +26,6 @@ class UserModel(db.Model):
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
     company = db.relationship("CompanyModel", back_populates="users", lazy="select")
 
-
     @classmethod
     def find_by_confirmation_token(cls, confirmation_token: str) -> "UserModel":
         return cls.query.filter_by(confirmation_token=confirmation_token).first()

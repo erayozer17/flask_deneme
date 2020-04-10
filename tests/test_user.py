@@ -1,9 +1,4 @@
-# project/server/tests/test_user.py
-
-
-import datetime
 import unittest
-import os
 
 from base import BaseTestCase
 
@@ -37,7 +32,6 @@ class TestUserResource(BaseTestCase):
             self.assertNotIn("access_token", response.json)
             self.assertNotIn("refresh_token", response.json)
             self.assertIn("message", response.json)
-
 
     # def test_logout_behaves_correctly(self):
     #     # Ensure logout behaves correctly - regarding the session.
