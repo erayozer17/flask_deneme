@@ -97,7 +97,8 @@ class UserInvite(Resource):
 
 class User(Resource):
     @jwt_required
-    def get(self, user_id: int):
+    def get(self):
+        user_id = get_jwt_identity()
         user = UserModel.find_by_id(user_id)
         if not user:
             return {"message": gettext("user_not_found")}, 404
@@ -105,7 +106,8 @@ class User(Resource):
         return user_schema.dump(user), 200
 
     @jwt_required
-    def delete(self, user_id: int):
+    def delete(self):
+        user_id = get_jwt_identity()
         user = UserModel.find_by_id(user_id)
         if not user:
             return {"message": gettext("user_not_found")}, 404

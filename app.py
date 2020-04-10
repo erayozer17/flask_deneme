@@ -33,7 +33,7 @@ def create_app(script_info=None):
     api.add_resource(UserLogin, "/login")
     api.add_resource(UserRegister, "/register")
     api.add_resource(UserRegister, "/register/<string:confirmation_token>")
-    api.add_resource(User, "/user/<int:user_id>")
+    api.add_resource(User, "/user")
     api.add_resource(UserList, "/users")
     api.add_resource(UserInvite, "/invite")
 
