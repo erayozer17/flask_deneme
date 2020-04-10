@@ -1,6 +1,7 @@
 from extensions import ma
 from models.user import UserModel
-from schemas.company import CompanySchema
+from schemas.company import CompanySchema, CompanyLoadSchema
+from schemas.remaining_employee import RemainingEmployeeSchema
 
 from copy import deepcopy
 
@@ -8,30 +9,28 @@ from copy import deepcopy
 class UserSchema(ma.ModelSchema):
     class Meta:
         model = UserModel
-        load_only = ("password",)
+        load_only = ("password", "confirmation_token", "created_at",)
         dump_only = ("id",)
         ordered = True
-    company = ma.Nested(CompanySchema)
+    company = ma.Nested(CompanyLoadSchema)
 
 
 class UserLoginSchema(ma.ModelSchema):
-    email = ma.String()
-    password = ma.String()
+    class Meta:
+        model = UserModel
+        fields = ("email", "password",)
 
 
 class UserInviteSchema(ma.ModelSchema):
-    email = ma.String()
-    name = ma.String()
-    surname = ma.String()
-    is_manager = ma.Boolean()
+    class Meta:
+        model = UserModel
+        fields = ("email", "is_manager",)
 
 
 class UserRegisterSchema(ma.ModelSchema):
-    email = ma.String()
-    name = ma.String()
-    surname = ma.String()
-    password = ma.String()
-    company = ma.Nested(CompanySchema)
+    class Meta:
+        model = UserModel
+        fields = ("email", "name", "surname", "password", "company_id",)
 
 
 def partial_schema_factory(schema_cls, partial=True, many=False):

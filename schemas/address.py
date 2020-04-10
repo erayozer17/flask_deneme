@@ -3,6 +3,6 @@ from models.address import AddressModel
 
 
 class AddressSchema(ma.ModelSchema):
-    address_line = ma.String()
-    city = ma.String()
-    country = ma.String()
+    class Meta:
+        model = AddressModel
+        fields = ("address_line", "city", "country",)

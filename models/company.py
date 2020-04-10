@@ -11,6 +11,7 @@ class CompanyModel(db.Model):
     address_id = db.Column(db.Integer, db.ForeignKey('addresses.id'))
     users = db.relationship('UserModel', back_populates='company', lazy="select")
     address = db.relationship('AddressModel', uselist=False, back_populates='company', lazy="select")
+    employee_quota = db.relationship('RemainingEmployeeModel', uselist=False, back_populates='company', lazy="select")
 
     __table_args__ = (
         db.CheckConstraint('default_off_days >= 0', name='check_default_off_days_positive'),

@@ -13,7 +13,7 @@
     "user_must_confirm": "User must confirm the account",
     "user_confirmation_subject": "Welcome to IngrydHR",
     "user_register_password_required": "Password is required for registering.",
-    "user_password_not_set": "User must set password",
+    "user_password_not_set": "User must provide further further info.",
     "user_invited": "User invited successfully",
     "user_must_be_admin": "User must be admin to invite.",
     "user_does_not_have_remaining_employess": "User does not have remaining employees."
