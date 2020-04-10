@@ -33,7 +33,7 @@ class UserRegister(Resource):
 
         user.is_admin = True
         user.is_manager = True
-        user.init_password_save_to_db()
+        user.save_to_db()
 
         # TODO Create an html template for email.
         send_transactional_mail_task.delay(gettext("user_confirmation_subject"),
@@ -50,7 +50,6 @@ class UserRegister(Resource):
             user.confirmed = True
             user.save_to_db()
             if not user.password:
-                # TODO use init_password_save_to_db method to hash the password
                 # TODO after user returns password
                 return {"message": gettext("user_password_not_set")}, 401
             return {"message": gettext("user_confirmed")}, 200
@@ -61,12 +60,12 @@ class UserRegister(Resource):
 class UserInvite(Resource):
     @jwt_required
     def post(self):
-        current_user = get_jwt_identity()
-        if not UserModel.find_by_id(current_user).confirmed:
-            return {"message": gettext("user_must_confirm")}, 401
+        curr_admin_id = get_jwt_identity()
+        admin = UserModel.find_by_id(curr_admin_id)
+        _check_eligibility(admin)
         user_json = request.get_json()
         user = user_invite_schema.load(user_json)
-        user.reports_to = current_user
+        user.admin_id = curr_admin_id
         user.save_to_db()
 
         # TODO Create an html template for email.
@@ -74,6 +73,15 @@ class UserInvite(Resource):
                                 user.email,
                                 f'<html><a href="http://localhost:5000/register/{user.confirmation_token}">Confirm</a></html>')
         return {"message": gettext("user_invited")}, 200
+
+    def _check_eligibility(admin: UserModel):
+        if not admin.confirmed:
+            return {"message": gettext("user_must_confirm")}, 401
+        if not admin.is_admin:
+            return {"message": gettext("user_must_be_admin")}, 401
+        if not admin.get_remaining_employee_days() < 1:
+            return {"message": gettext("user_does_not_have_remaining_employess")}, 401
+
 
 class User(Resource):
     @jwt_required

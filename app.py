@@ -19,6 +19,9 @@ def create_app(script_info=None):
         raise ValueError('APP_SETTINGS environment variable is not set. Aborting.')
     app.config.from_object(app_settings)
 
+    #Migration purposes
+    from models import user, remaining_employee, company, address
+
     jwt.init_app(app)
     db.init_app(app)
     api.init_app(app)

@@ -1,5 +1,6 @@
 from typing import List
 from uuid import uuid4
+import datetime
 
 from extensions import db
 
@@ -12,13 +13,18 @@ class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     surname = db.Column(db.String(80), nullable=False)
-    password = db.Column(db.String(120))
+    password = db.Column(db.String(128))
     email = db.Column(db.String(80), nullable=False, unique=True)
     confirmation_token = db.Column(db.String(36), unique=True, default=str(uuid4()))
-    confirmed = db.Column(db.Boolean(), default=False)
-    is_admin = db.Column(db.Boolean(), default=False)
-    is_manager = db.Column(db.Boolean(), default=False)
-    reports_to = db.Column(db.Integer())
+    confirmed = db.Column(db.Boolean, default=False)
+    is_admin = db.Column(db.Boolean, default=False)
+    is_manager = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    manager_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
+    company = db.relationship("CompanyModel", back_populates="users", lazy="select")
+    employee_quota = db.relationship("RemainingEmployeeModel", uselist=False, back_populates="admin", lazy="select")
 
 
     @classmethod
@@ -37,20 +43,19 @@ class UserModel(db.Model):
     def find_all(cls) -> List["UserModel"]:
         return cls.query.all()
 
+    def get_remaining_employee_days(self) -> int:
+        return self.employee_quota.no_of_remaining_employee
+
     def save_to_db(self) -> None:
+        hashing_method = "pbkdf2:sha256"
+        if self.password and not self.password.startswith(hashing_method):
+            self.password = generate_password_hash(self.password)
         db.session.add(self)
         db.session.commit()
-
-    def init_password_save_to_db(self) -> None:
-        self.hash_password()
-        self.save_to_db()
 
     def delete_from_db(self) -> None:
         db.session.delete(self)
         db.session.commit()
-
-    def hash_password(self) -> None:
-        self.password = generate_password_hash(self.password)
 
     def check_password(self, password) -> bool:
         return check_password_hash(self.password, password)

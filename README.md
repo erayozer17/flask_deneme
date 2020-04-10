@@ -21,6 +21,8 @@ $ python manage.py create-admin
 $ python manage.py create-data
 ```
 
+**if you create a new model, import it in models/__init__.py and app.py(inside create_app function)**
+
 ### Run the Application
 
 ```sh
