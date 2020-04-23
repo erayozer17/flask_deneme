@@ -37,6 +37,10 @@ def create_app(script_info=None):
     api.add_resource(UserList, "/users")
     api.add_resource(UserInvite, "/invite")
 
+    @app.route('/ping')
+    def pong():
+        return 'pong'
+
     @api.errorhandler(Unauthorized)
     def unauthorized_page(error):
         return {"message": "401, change this on prod."}, 401
